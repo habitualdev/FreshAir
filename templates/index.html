@@ -1,0 +1,129 @@
+<style>
+
+.column {
+    width: 40%;
+    float: left;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+</style>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+    function get_content() {
+        $.ajaxSetup ({
+                cache: false
+                  });
+
+            $.ajax({url:'/_display',
+                success:function(){},
+                success:function(response){
+                    document.getElementById('display').innerHTML= response;},
+                complete: function(){
+                setTimeout(get_content, 1000)
+                }
+            })
+    }
+
+    $(function(){
+        $('a#start').bind('click', function() {
+      $.getJSON('/_start', {
+        streamer: $('input[name="streamer"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+
+        setTimeout(get_content, 1000)
+        })
+               })
+
+
+</script>
+
+<script>
+    $(function(){
+        $('a#restart').bind('click', function (){
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", "/_restart");
+            xmlHttp.send()})})
+
+
+
+</script>
+
+
+
+<script>
+  $(function() {
+    $('a#name_ban').bind('click', function() {
+      $.getJSON('/_add_ban', {
+        name: $('input[name="name"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      document.getElementById('innerframe').contentWindow.location.reload();
+      return false;
+    });
+  });
+</script>
+
+<script>
+  $(function() {
+    $('a#word_ban').bind('click', function() {
+      $.getJSON('/_add_word', {
+        word: $('input[name="word"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      document.getElementById('innerframe').contentWindow.location.reload();
+      return false;
+    });
+  });
+</script>
+
+<body style="background-image: url('/static/background.jpg'); background-size: cover;">
+<h1 style="background-color: black; color:ivory; text-align: center; border-color: ivory; border-width: medium; border-radius: 10px;" >Fresh Air</h1>
+<h2 style="background-color: black; color:ivory; text-align: center; border-color: ivory; border-width: medium; border-radius: 10px;" >A Twitter negativity screen</h2>
+
+<div id='outerdiv'>
+
+    <div id="display" style="background: rgb(124,172,217); overflow: auto; height: 80%; border-radius: 25px;">
+
+    </div>
+
+
+</div>
+
+<div class="row">
+  <div class="column" style="align-content: center">
+    <p style="align-content: center"><input type=text size=40 name=name>
+<p style="align-content: center"><a href=# id=name_ban style="font-size: large; color: black">Add name to ban-list</a>
+  </div>
+  <div class="column">
+      <div class="row">
+          <p><a href=# id=start style="font-size: large; color: black">START  </a><input type=text size=40 name=streamer></p>
+          <p><a href=# id=restart style="font-size: large; color: black">RESTART</a></p>
+      </div>
+  </div>
+</div>
+
+
+
+</body>
