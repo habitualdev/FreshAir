@@ -1,6 +1,7 @@
 import datetime
 from flask import Flask, jsonify, render_template, request
 import copy
+import re
 
 app = Flask(__name__)
 
@@ -15,17 +16,29 @@ class twitter_data:
         self.reset = 0
 
 
+
+
+
+
+
 init = twitter_data()
 init.username = "habitual_dev"
 init.table = []
-init.ban.append("realdonaldtrump")
-init.words.append("")
 init.html = ""
+
+with open("ban.list") as fban:
+    text = fban.read().split(",")
+    for asshole in text:
+        init.ban.append(asshole)
+
+with open("badword.list") as fbad:
+    text = fbad.read().split(",")
+    for badword in text:
+        init.words.append(badword)
 
 
 def scrape(streamer):
     init.username = streamer
-    print(streamer)
     import twint
     n = 0
     while True:
@@ -45,28 +58,37 @@ def scrape(streamer):
         data_dict = dataframe.to_dict()
         data_user = data_dict["username"]
         data_data = data_dict["tweet"]
+        data_timestamp = data_dict["date"]
+
+
 
         for line in data_data:
-            matched = False
-            data_entry = str(data_user[line]) + " : " + data_data[line]
+            name_matched = False
+            word_match = False
+            data_entry = str(data_timestamp[line]) + " : " + str(data_user[line]) + " : " + data_data[line]
             for table_line in init.table:
-
-                if data_entry in table_line:
-                    matched = True
-            if not matched:
+                if data_entry in table_line["tweet"]:
+                    name_matched = True
+            if not name_matched:
                 if data_user[line] not in init.ban:
-                    init.table.append(data_entry)
+                    for badword in init.words:
+                        if re.search(badword, data_entry):
+                            word_match = True
+                    if not word_match:
+                        init.table.append({"timestamp": data_timestamp[line], "tweet": data_entry})
 
 
 @app.route('/_display')
 def return_html():
-    init.html = "<body>"
+    init.html = "<body>\n<div style='background: rgb(124,172,217);'> " "____Timestamp____:____User____:____Tweet____  " + "</div> <hr>\n\r"
+
     working_table = copy.deepcopy(init.table)
+    working_table.sort(key=lambda x: x["timestamp"])
     working_table.reverse()
     try:
 
         for entry in working_table:
-            init.html = init.html + "<div style='background: rgb(124,172,217);'> " + entry + "</div> <hr>\n\r"
+            init.html = init.html + "<div style='background: rgb(124,172,217);'> " + entry["tweet"] + "</div> <hr>\n\r"
     except:
         init.html = init.html + "<div style='background-color: white;'> " + "</div> <hr>\n\r"
     init.html = init.html + "</body>"
@@ -88,9 +110,17 @@ def add_name():
     return jsonify(result="Success")
 
 
+@app.route('/_add_word')
+def add_word():
+    name = request.args.get('word', 0, type=str)
+    init.words.append(name)
+    init.reset = 1
+    return jsonify(result="Success")
+
 @app.route('/_restart')
 def restart():
     init.ban = ["realdonaldtrump"]
+    init.words = ["fuck","bitch"]
     init.html = ""
     init.table = []
     return jsonify(result="Success")
