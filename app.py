@@ -16,11 +16,6 @@ class twitter_data:
         self.reset = 0
 
 
-
-
-
-
-
 init = twitter_data()
 init.username = "habitual_dev"
 init.table = []
@@ -35,7 +30,6 @@ with open("badword.list") as fbad:
     text = fbad.read().split(",")
     for badword in text:
         init.words.append(badword)
-
 
 def scrape(streamer):
     init.username = streamer
@@ -116,6 +110,7 @@ def add_word():
     init.words.append(name)
     init.reset = 1
     return jsonify(result="Success")
+
 
 @app.route('/_restart')
 def restart():

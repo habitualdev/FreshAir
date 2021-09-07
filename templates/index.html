@@ -1,7 +1,6 @@
 <style>
 
 .column {
-    width: 40%;
     float: left;
     margin-right: 2.5%;
     margin-left: 2.5%;
@@ -58,17 +57,14 @@
 </script>
 
 <script>
-    $(function(){
-        $('a#restart').bind('click', function (){
+    $(function() {
+        $('a#restart').bind('click', function () {
             var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open( "GET", "/_restart");
-            xmlHttp.send()})})
-
-
-
+            xmlHttp.open("GET", "/_restart");
+            xmlHttp.send()
+        })
+    })
 </script>
-
-
 
 <script>
   $(function() {
@@ -98,34 +94,35 @@
   });
 </script>
 
-<body style="background-image: url('/static/background.jpg'); background-size: cover;">
+<body style="background-image: linear-gradient(to right top, ivory 60%, aqua 100%); background-size: cover;">
 <h1 style="background-color: black; color:ivory; text-align: center; border-color: ivory; border-width: medium; border-radius: 10px;" >Fresh Air</h1>
 <h2 style="background-color: black; color:ivory; text-align: center; border-color: ivory; border-width: medium; border-radius: 10px;" >A Twitter negativity screen</h2>
-
+<div class="column" style="width: 70%">
 <div id='outerdiv'>
 
-    <div id="display" style="background: rgb(124,172,217); overflow: auto; height: 80%; border-radius: 25px;">
+    <div id="display" style="background: rgb(124,172,217); overflow: auto; height: 80%; border-radius: 2.5%;">
 
     </div>
-
+    </div>
 
 </div>
 
-<div class="row">
-  <div class="column" style="align-content: center">
-    <p style="align-content: center"><input type=text size=40 name=name>
-<p style="align-content: center"><a href=# id=name_ban style="font-size: large; color: black">Add name to ban-list</a>
-      <p style="align-content: center"><input type=text size=40 name=word>
-<p style="align-content: center"><a href=# id=name_ban style="font-size: large; color: black">Add word to ban-list</a>
-  </div>
-  <div class="column">
+  <div class="column" style="align-content: center; width: 16%;">
+      <div style=" background: rgb(124,172,217);border-radius: 2.5%;">
+    <hr>
+    <p style="align-content: center; margin-left: 4%"><input type=text size=20% name=name>
+<p style="align-content: center"><a href=# id=name_ban style="font-size: large; color: black; margin-left: 4%">Add name to ban-list</a>
+      <p style="align-content: center; margin-left: 4%"><input type=text size=20% name=word>
+<p style="align-content: center"><a href=# id=name_ban style="font-size: large; color: black; margin-left: 4%">Add word to ban-list</a>
       <div class="row">
-          <p><a href=# id=start style="font-size: large; color: black">START  </a><input type=text size=40 name=streamer></p>
-          <p><a href=# id=restart style="font-size: large; color: black">RESTART</a></p>
+          <p style=" margin-left: 4%"><input type=text size=20% name=streamer></p>
+      <p><a href=# id=start style="font-size: large; color: black; margin-left: 4%">START  </a></p>
+          <p><a href=# id=restart style="font-size: large; color: black; margin-left: 4%">STOP</a></p>
       </div>
+      </div>
+      <p><hr></p>
+      <img src="/static/owl.png">
   </div>
 </div>
-
-
-
+</div>
 </body>
